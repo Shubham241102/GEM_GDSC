@@ -1,0 +1,37 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+
+import google.generativeai as genai
+
+import streamlit as st 
+
+model=genai.configure(api_key=os.getenv("GOOGLE_API"))
+model=genai.GenerativeModel("gemini-pro")
+chat=model.start_chat(history=[])
+
+def get_gemini_response(question):
+    response=chat.send_message( question , stream=True)
+    return response
+
+st.set_page_config("Q&A Chatbot")
+st.header("Mai Hu Ek ChatBot")
+
+if 'chat_history' not in st.session_state:
+    st.session_state['chat_history']=[]
+
+input=st.text_input("Input:", key="input")
+submit = st.button ("Answer Btaiye")
+
+if input and submit:
+    response=get_gemini_response(input)
+    st.session_state['chat_history'].append(("You", input))
+    st.subheader("Ye raha answer: ")
+    for chunk  in response:
+        st.write(chunk.txt)
+        st.session_state['chat_history'].append(("Response" ,chunk.txt))
+st.subheader("ye raha aapka chat ka history")
+
+for role, response in st.session_state['chat_history']:
+    st.write(f"{role}: {response}")
