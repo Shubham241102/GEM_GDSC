@@ -29,8 +29,8 @@ if input and submit:
     st.session_state['chat_history'].append(("You", input))
     st.subheader("Ye raha answer: ")
     for chunk  in response:
-        st.write(chunk.txt)
-        st.session_state['chat_history'].append(("Response" ,chunk.txt))
+        st.write(chunk.text)
+        st.session_state['chat_history'].append(("Response" ,chunk.text))
 st.subheader("ye raha aapka chat ka history")
 
 for role, response in st.session_state['chat_history']:
